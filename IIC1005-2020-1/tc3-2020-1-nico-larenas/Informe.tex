@@ -1,0 +1,73 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multicol}
+\usepackage{fullpage}
+\usepackage{bera}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\begin{flushleft}
+{\footnotesize Pontificia Universidad Católica de Chile\\
+Departamento de Ciencia de la Computación\\
+Computación: Ciencia y Tecnología del Mundo Digital\\
+}
+\begin{center}
+{\huge\bf Tarea Chica 3: Máquinas de Turing}\\ \vspace{0.5cm}
+Profesor Denis Parra \\
+Alumna Nicole Larenas\\
+Fecha de entrega 15 de Junio del 2020
+
+\rule{\linewidth}{0.1mm}
+\end{center}
+\end{flushleft}
+
+\section*{Informe}
+\subsection*{1. Funcionamiento máquina:}
+La máquina de turing creada por nosotros se compone de tres cintas, y básicamente sirve para saber si una secuencia de números binarios cumple con 2 condiciones. En primer lugar, que el primer número de toda la secuencia sea menor que el segundo; En segundo lugar que el antecesor de un número y el antecesor del antecesor de ese número, al ser sumados den exactamente ese mismo número.\\
+En un primer lugar la máquina recibe un input conformado por secuencias de números binarios separados por un punto, que son siempre de la misma longitud, esta secuencia de números binarios se muestra en la primera cinta, al empezar a correr el código los componentes del primer número de la secuencia son "bajados" -desde izquierda a derecha- a la segunda cinta, esto ocurre hasta que la máquina se encuentra con un \textbf{.} donde se detiene automáticamente.\\
+Al detenerse la máquina, la segunda cinta comienza a moverse a la izquierda hasta llegar al inicio del número, así ambas cintas se encuentran en un espacio vacío.\\
+A partir de ese momento se ve si se cumple con la primera condición, esto se logra haciendo que ambas cintas se muevan hacia la derecha, si es que el número de la primera cinta tiene un 1 antes que el número de la segunda cinta, entonces se cumple la condición y se sigue avanzando hasta llegar al \textbf{.} en la primera cinta, si es que la condición no se cumple, es decir, en la segunda cinta aparece un 1 antes que en la primera, la máquina lanza un mensaje de error y rechaza el input, terminando automáticamente con el proceso de la máquina.\\
+En el caso de que la primera condición se cumpla se comienza a sumar el número previo al \textbf{.} en la primera cinta y el número de la segunda cinta -de derecha a izquierda- ,este resultado se almacena en la tercera cinta.\\
+En este momento en la primera cinta tenemos el segundo número de la secuencia, en la segunda cinta tenemos el primer número y en la tercera cinta tenemos la suma de estos dos. Estamos posicionados a la izquiera de esos tres números, en un espacio en blanco respectivamente.\\
+Ahora comenzamos a mover la primera cinta y la segunda hacia la derecha, hasta que la primera cinta llegue a un espacio en blanco que indica que está por comenzar el tercer número de la secuencia, mientras las cintas se van moviendo el segundo número de la secuencia se baja hacia la segunda cinta, borrando por completo el primer número de la secuencia. Al final de este paso nos encontramos con las tres cintas en espacios en blanco, la primera esta en el espacio a la izquierda del tercer número de la secuencia, la segunda está la derecha del final del segundo número de la secuencia y la tercera cinta está en el espacio a la izquierda del inicio de la suma.\\
+Ahora se intenta comprobar la condición dos, aquí se comparan los números de la primera cinta con los de la tercera cinta de izquierda a derecha, si estos son iguales la máquina aprobara el input, mientras que si estos son distintos la máquina mostrará un error y rechazará el input.\\
+Si es que la segunda condición se cumple y es una secuencia de solo tres números binarios, la máquina lanzará un mensaje que diga \textbf{Aprobado} y se terminará su trabajo, pero si la secuencia tiene más de tres números binarios, se volverá a repetir el mismo procedimiento que antes, desde el momento en el que se empiezan a sumar los números de la primera y la segunda cinta, posicionandolos en la tercera. Esto se repetirá hasta que quede solo el último número de la secuencia en la primera cinta. 
+
+\subsection*{2. Definiciones formales:}
+\begin{itemize}
+		        \item $Q = \{E_{i}, N_{0}, C_{o}, C_{c}, S_{u}, S_{u1}, S_{uf}, N_{1}, I_{g}, I_{gf}, B_{o}\}$
+		        
+		        \item $q_{0} = E_{i}$
+		        
+		        \item $\Gamma$  $=\{0,1,.,B\}$\\
+		        Donde la celda vacía se representa como B.
+		        
+		        \item $F = \{I_{gf}\}$
+		        
+
+ 		    \end{itemize}
+
+
+\subsection*{3. Estados de \textit{Q}:}
+\begin{enumerate}
+		        \item \textit{$E_{i}$}: Es el estado inicial de la maquina, el cual recibe el imput, es el encargado de revisar los componentes del primer número binario, y se encarga de bajarlos a la segunda cinta. Si en el input hay un 1 o un 0, este número pasa a la cinta número 2 y ésta más la primera cinta se mueven hacia la derecha. En el caso de que haya un . la máquina pasa al estado \textit{$N_{0}$}.
+		        \item \textit{$N_{0}$}: En este estado la máquina elimina el . y mueve solo la cinta número 2 hacia la izquierda, hasta llegar al inicio del primer número binario, cuando llega a un espacio vacío pasa al estado \textit{$C_{o}$}.
+		        \item \textit{$C_{o}$}: En este estado se ve que el número de la cinta número 1 sea mayor al de la cinta número dos, si ambos números son 0 se mantiene en este estado y se avanza en ambas cintas hacia la derecha, hasta que se cumpla que en la primera cinta hay un 0 y en la segunda no, después de esto se pasa al estado \textit{$C_{c}$}.
+		        \item \textit{$C_{c}$}: En este estado la comparación ya se cumplió, por lo que se encarga de avanzar hacia la derecha sin hacer modificaciones, hasta llegar al ., ahí este se elimina y se pasa al estado \textit{$S_{u}$}.
+		        \item \textit{$S_{u}$}: En este estado las se suman los números de la cinta número uno con los de la cinta número dos y su resultado se va almacenando en la cinta número 3, por lo que las tres cintas se van moviendo hacia la izquierda después de cada suma, si la suma se termina sin ningún inconventiente - no existe 1+1 - se pasa al estado \textit{$S_{uf}$}, si existe un inconveniente se pasa al estado \textit{$S_{u1}$}.
+		        \item \textit{$S_{u1}$}: Este estado solo ocurre si existe una suma 1+1, en este caso se aplican las propiedades de la suma de números binarios y al terminar se pasa a \textit{$S_{uf}$}
+		        \item \textit{$S_{uf}$}: En este estado se encuentra la suma final, cuando se llega a el se detienen las tres cintas y se pasa al estado \textit{$N_{1}$}.
+		        \item \textit{$N_{1}$}: En este estado el segundo número binario de la secuencia inicial se baja - reemplazando al número inicialm - al igual que lo que pasa en \textit{$E_{i}$}, cuando este proceso termina pasa al estado \textit{$I_{g}$}.
+		        \item \textit{$I_{g}$}: En este estado se compara que los números de la suma sean iguales a los de la primera cinta, si son iguales se avanza hacia la derecha, cuando se llega a espacios vacios en ambas cintas se pasa a \textit{$I_{gf}$}, al llegar a un . se pasa al estado \textit{$B_{o}$}.
+		        \item \textit{$I_{gf}$}: Este estado solo se alcanza si la suma es igual al número en la cinta número uno, y si es que se alcanza este estado la máquina aprueba el input.
+		        \item \textit{$B_{o}$}: Este estado se utiliza para comenzar todo el proceso nuevamente, si es que hay más de tres números binarios en la secuencia, este estado hace que se vuelva al estado \textit{$S_{u}$} y que todas las cintas se muevan hacia la izquierda.
+		    \end{enumerate}
+
+\end{document}
